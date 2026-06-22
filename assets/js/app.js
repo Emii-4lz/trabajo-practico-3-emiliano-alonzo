@@ -28,8 +28,10 @@ const cargarPersonajes = async () => {
         personajes.forEach((personaje) => {
             rowContainer.innerHTML += `
                     <div class="col-md-4 mb-4">
-                        <img src="${personaje.portrait_path}" alt="${personaje.name}"/>
+                        <img src="https://cdn.thesimpsonsapi.com/500${personaje.portrait_path}" alt="${personaje.name}"/>
                         <h3>${personaje.name}</h3>
+                        <p>${personaje.occupation}</p>
+                        <p>${personaje.status}</p>
                         <button class="btn btn-primary btn-ver-detalle" data-id="${personaje.id}">ver detalle</button>
                     </div>
                 `;
@@ -49,4 +51,4 @@ const filtrarPersonajes = () => {
 
 
 obtenerPersonajes();
-cargarPersonajes();
+cargarPersonajes();                                               
