@@ -2,6 +2,8 @@ const urlPersonajesGeneral = "https://thesimpsonsapi.com/api/characters";
 const urlPersonajeIndividual = "https://thesimpsonsapi.com/api/characters/1";
 personajes = [];
 const rowContainer = document.getElementById("rowContainer");
+const inputBuscador = document.getElementById("buscadorPjs");
+const botonBuscar = document.getElementById("botonBuscar")
 
 
 fetch(urlPersonajesGeneral)
@@ -41,14 +43,5 @@ const cargarPersonajes = async () => {
     };
 }
 
-
-
-
-
-const filtrarPersonajes = () => {
-    cargarPersonajes()
-};
-
-
 obtenerPersonajes();
-cargarPersonajes();                                               
+cargarPersonajes();
