@@ -1,5 +1,5 @@
 const urlPersonajesGeneral = "https://thesimpsonsapi.com/api/characters";
-const urlPersonajeIndividual = "https://thesimpsonsapi.com/api/characters/1";
+
 personajes = [];
 const rowContainer = document.getElementById("rowContainer");
 const inputBuscador = document.getElementById("buscadorPjs");
@@ -34,7 +34,7 @@ const cargarPersonajes = async () => {
                         <h3>${personaje.name}</h3>
                         <p>${personaje.occupation}</p>
                         <p>${personaje.status}</p>
-                        <button class="btn btn-primary btn-ver-detalle" data-id="${personaje.id}">ver detalle</button>
+                        <button class="btn btn-primary" id="btn-ver-personaje" data-id="${personaje.id}">ver detalle</button>
                     </div>
                 `;
         });
@@ -45,3 +45,41 @@ const cargarPersonajes = async () => {
 
 obtenerPersonajes();
 cargarPersonajes();
+
+//const urlPersonajeIndividual = "https://thesimpsonsapi.com/api/characters${personaje.id}"
+
+async function obtenerPersonajeIndividual(id) {
+    try {
+        const response = await fetch(`${urlPersonajesGeneral}/${id}`);
+
+        const personaje = await response.json();
+
+        mostrarModal(personaje);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function mostrarModal(personaje) {
+    document.getElementById("modalNombre").textContent = personaje.name;
+    document.getElementById("modalImg").src = `https://cdn.thesimpsonsapi.com/500${personaje.portrait_path}`;
+    document.getElementById("modalEdad").textContent = personaje.age ?? "Desconocida";
+    document.getElementById("modalFNacimiento").textContent = personaje.birthdate ?? "Desconocida";
+    document.getElementById("modalGenero").textContent =
+        personaje.gender ?? "Desconocido";
+    document.getElementById("modalOcupacion").textContent = personaje.occupation;
+    document.getElementById("modalEstado").textContent = personaje.status;
+    document.getElementById("modalFrase").textContent =
+        personaje.phrases[0] ?? "Sin frases";
+
+
+    const modal = new bootstrap.Modal(document.getElementById("modalDetalle"));
+    modal.show();
+};
+
+rowContainer.addEventListener("click", (event) => {
+    if (event.target.id === "btn-ver-personaje") {
+        const id = event.target.dataset.id;
+        obtenerPersonajeIndividual(id);
+    };
+});
