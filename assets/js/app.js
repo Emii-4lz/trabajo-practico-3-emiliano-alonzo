@@ -1,16 +1,12 @@
 const urlPersonajesGeneral = "https://thesimpsonsapi.com/api/characters";
 const urlPersonajeIndividual = "https://thesimpsonsapi.com/api/characters/1";
-personajes = [];
+let personajes = [];
+
 const rowContainer = document.getElementById("rowContainer");
-
-
-fetch(urlPersonajesGeneral)
-    .then(response => response.json())
-    .then(data => console.log(data))
-
+const buscadorInput = document.getElementById("buscadorPjs");
+const buscador = document.getElementById("buscador");
 
 const obtenerPersonajes = async () => {
-
     try {
         const response = await fetch(urlPersonajesGeneral)
         const data = await response.json()
@@ -21,11 +17,15 @@ const obtenerPersonajes = async () => {
     }
 };
 
-const cargarPersonajes = async () => {
-    const personajes = await obtenerPersonajes()
-    if (personajes && Array.isArray(personajes)) {
+const cargarPersonajes = async (listado = null) => {
+    if (!listado) {
+        personajes = await obtenerPersonajes();
+        listado = personajes;
+    };
+
+    if (listado && Array.isArray(listado)) {
         rowContainer.innerHTML = "";
-        personajes.forEach((personaje) => {
+        listado.forEach((personaje) => {
             rowContainer.innerHTML += `
                     <div class="col-md-4 mb-4">
                         <img src="https://cdn.thesimpsonsapi.com/500${personaje.portrait_path}" alt="${personaje.name}"/>
@@ -41,14 +41,29 @@ const cargarPersonajes = async () => {
     };
 }
 
+cargarPersonajes();
 
 
+function filtrarPersonajes() {
+    const texto = buscadorInput.value.trim().toLowerCase();
 
+    if (texto === "") {
 
-const filtrarPersonajes = () => {
-    cargarPersonajes()
+        cargarPersonajes(personajes);
+        return;
+    }
+
+    const filtrados = personajes.filter((personaje) =>
+        personaje.name.toLowerCase().includes(texto)
+    );
+
+    cargarPersonajes(filtrados);
+}
+
+buscadorInput.addEventListener("input", filtrarPersonajes);
+if (buscador) {
+    buscador.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        filtrarPersonajes();
+    });
 };
-
-
-obtenerPersonajes();
-cargarPersonajes();                                               
